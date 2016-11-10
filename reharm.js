@@ -5,6 +5,7 @@ const teoria = require('teoria');
 const tonal = require('tonal'); // for MIDI
 
 const subs = require('./substitutions');
+const helpers = require('./helpers');
 
 /*
 
@@ -20,13 +21,7 @@ auralize it onClick. jquery or react ?
 
 */
 
-var bbmaj = teoria.chord('Bbmaj7');
-// Default voicing:
-bbmaj.voicing();  // #-> ['P1', 'M3', 'P5', 'M7'];
-// console.log(bbmaj.dominant('7'));    // #-> ['bb', 'd', 'f', 'a'];
-
-const fiveOne = ['F#7', 'B'];
-// console.log(chordArr, chordArr.length-2);
+const fiveOne = ['G7', 'C'];
 
 // builds chord array of chord objects from chord string array
 const buildChordArr = function(chordArrStr){
@@ -37,13 +32,25 @@ const buildChordArr = function(chordArrStr){
 // console.log(buildChordArr(chordArr));
 // console.log(subs.fiveOneToTwoFiveOne(buildChordArr(chordArr)))
 
-const idenfityOpps = function(chordArr){
-
+const identifyOpps = function(chordArr){
+    let opportunities = {};
+    for (var i = 0; i < chordArr.length-1; i++){
+        if (chordArr[i] === teoria.note(helpers.noteName(chordArr[i+1])).interval('P5').chord('7').name){
+            if (!opportunities.fiveOneToTwoFiveOne) opportunities.fiveOneToTwoFiveOne = [];
+            opportunities.fiveOneToTwoFiveOne.push(i);
+        }
+    }
+    return opportunities;
 }
 
-const makeSubs = function(chordArr, locations){
+const makeSubs = function(chordArr, opportunities){
     // console.log(chordArr)
-    return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), locations);
+    let location;
+    for (var prop in opportunities){
+        location = opportunities[prop];
+    }
+    return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), location);
 }
 
-console.log(makeSubs(fiveOne, 0));
+console.log(JSON.stringify(makeSubs(fiveOne, identifyOpps(fiveOne)), null, 0));
+// console.log(idenfityOpps(fiveOne));
