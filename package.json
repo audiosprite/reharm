@@ -4,8 +4,17 @@
   "description": "",
   "main": "reharm.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon reharm.js",
+    "test": "nodemon reharm.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "teoria": "^2.2.0",
+    "tonal": "^0.50.3",
+    "tone": "^0.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }
