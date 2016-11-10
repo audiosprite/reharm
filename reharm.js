@@ -25,7 +25,7 @@ var bbmaj = teoria.chord('Bbmaj7');
 bbmaj.voicing();  // #-> ['P1', 'M3', 'P5', 'M7'];
 // console.log(bbmaj.dominant('7'));    // #-> ['bb', 'd', 'f', 'a'];
 
-const fiveOne = ['G7', 'C'];
+const fiveOne = ['F#7', 'B'];
 // console.log(chordArr, chordArr.length-2);
 
 // builds chord array of chord objects from chord string array
@@ -43,7 +43,7 @@ const idenfityOpps = function(chordArr){
 
 const makeSubs = function(chordArr, locations){
     // console.log(chordArr)
-    return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), 0);
+    return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), locations);
 }
 
-console.log(makeSubs(fiveOne, 1));
+console.log(makeSubs(fiveOne, 0));
