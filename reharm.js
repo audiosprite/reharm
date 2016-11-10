@@ -21,7 +21,7 @@ auralize it onClick. jquery or react ?
 
 */
 
-const fiveOne = ['G7', 'C'];
+const fiveOne = ['F#7', 'C'];
 
 // builds chord array of chord objects from chord string array
 const buildChordArr = function(chordArrStr){
@@ -36,6 +36,7 @@ const identifyOpps = function(chordArr){
     let opportunities = {};
     for (var i = 0; i < chordArr.length-1; i++){
         if (chordArr[i] === teoria.note(helpers.noteName(chordArr[i+1])).interval('P5').chord('7').name){
+            console.log('identified 251')
             if (!opportunities.fiveOneToTwoFiveOne) opportunities.fiveOneToTwoFiveOne = [];
             opportunities.fiveOneToTwoFiveOne.push(i);
         }
@@ -43,14 +44,15 @@ const identifyOpps = function(chordArr){
     return opportunities;
 }
 
-const makeSubs = function(chordArr, opportunities){
-    // console.log(chordArr)
+const makeSubs = function(chordArr){
+    let opportunities = identifyOpps(chordArr);
     let location;
     for (var prop in opportunities){
         location = opportunities[prop];
     }
-    return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), location);
+    if (Object.keys(opportunities).length) return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), location);
+    return helpers.makeChords(chordArr);
 }
 
-console.log(JSON.stringify(makeSubs(fiveOne, identifyOpps(fiveOne)), null, 0));
+console.log(JSON.stringify(makeSubs(fiveOne), null, 0));
 // console.log(idenfityOpps(fiveOne));
