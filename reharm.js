@@ -1,5 +1,7 @@
-// const PolySynth = require("Tone").PolySynth;
+// const PolySynth = require("tone").PolySynth;
 // const synth = new PolySynth();
+
+const _ = require('lodash');
 
 const teoria = require('teoria');
 const tonal = require('tonal'); // for MIDI
@@ -21,7 +23,7 @@ auralize it onClick. jquery or react ?
 
 */
 
-const fiveOne = ['G7', 'C'];
+const fiveOne = ['E7', 'G7', 'Cmaj7'];
 
 // builds chord array of chord objects from chord string array
 const buildChordArr = function(chordStrArr){
@@ -29,27 +31,43 @@ const buildChordArr = function(chordStrArr){
     chordStrArr.forEach(chord => chordArr.push(teoria.chord(chord)));
     return chordArr;
 }
-// console.log(buildChordArr(chordArr));
-// console.log(subs.fiveOneToTwoFiveOne(buildChordArr(chordArr)))
 
+// identify opportunities to substitute chords
 const identifyOpps = function(chordArr){
     let opportunities = {};
+    console.log(chordArr);
     for (var i = 0; i < chordArr.length-1; i++){
-        if (chordArr[i] === teoria.note(helpers.noteName(chordArr[i+1])).interval('P5').chord('7').name){
-            console.log('identified 251')
+        // if (chordArr[i] === teoria.note(helpers.noteName(chordArr[i+1])).interval('P5').chord('7').name){
+        if(
+            (helpers.fivesOf(chordArr[i+1]).indexOf(chordArr[i]) !== -1) &&
+            (!chordArr[i-1] || helpers.fivesOf(chordArr[i]).indexOf(chordArr[i-1]) === -1)
+            ){
             if (!opportunities.fiveOneToTwoFiveOne) opportunities.fiveOneToTwoFiveOne = [];
             opportunities.fiveOneToTwoFiveOne.push(i);
         }
     }
+    console.log(opportunities);
     return opportunities;
 }
 
+// make chord substitutions
 const makeSubs = function(chordArr){
     let opportunities = identifyOpps(chordArr);
-    let location = opportunities[helpers.randomProp(opportunities)];
-    if (Object.keys(opportunities).length) return subs.fiveOne[helpers.randomProp(subs.fiveOne)](buildChordArr(chordArr), location);
+    let locations = opportunities[helpers.randomProp(opportunities)];
+    let location = locations[Math.floor(Math.random() * locations.length)];
+    if (Object.keys(opportunities).length) {
+        return subs.splitters.fiveOne[helpers.randomProp(subs.splitters.fiveOne)](buildChordArr(chordArr), location);
+    }
     return buildChordArr(chordArr);
 }
 
-console.log(JSON.stringify(makeSubs(fiveOne), null, 0));
-// console.log(identifyOpps(fiveOne));
+// return array of chord names from chord objs
+const chordNames = function(objsArr){
+    let rawArr = [];
+    objsArr.forEach(chordObj => rawArr.push(chordObj.name));
+    return rawArr;
+}
+
+// console.log(JSON.stringify(makeSubs(fiveOne), null, 0));
+console.log(makeSubs(fiveOne));
+// console.log(helpers.fivesOf('C7'));

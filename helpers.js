@@ -25,9 +25,20 @@ const randomProp = function(obj) {
     return result;
 }
 
+const fivesOf = function(chordName){
+    let fives = [
+        teoria.note(noteName(chordName)).interval('P5').chord('7').name,
+        teoria.note(noteName(chordName)).interval('m2').chord('7').name,
+        teoria.note(noteName(chordName)).interval('m3').chord('7').name,
+        teoria.note(noteName(chordName)).interval('M6').chord('7').name
+    ];
+    return fives;
+}
+
 module.exports = {
     noteName,
     makeChords,
     splitChordName,
-    randomProp
+    randomProp,
+    fivesOf
 }
