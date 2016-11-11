@@ -21,12 +21,12 @@ auralize it onClick. jquery or react ?
 
 */
 
-const fiveOne = ['F#7', 'C'];
+const fiveOne = ['G7', 'C'];
 
 // builds chord array of chord objects from chord string array
-const buildChordArr = function(chordArrStr){
+const buildChordArr = function(chordStrArr){
     let chordArr = [];
-    chordArrStr.forEach(chord => chordArr.push(teoria.chord(chord)));
+    chordStrArr.forEach(chord => chordArr.push(teoria.chord(chord)));
     return chordArr;
 }
 // console.log(buildChordArr(chordArr));
@@ -46,13 +46,10 @@ const identifyOpps = function(chordArr){
 
 const makeSubs = function(chordArr){
     let opportunities = identifyOpps(chordArr);
-    let location;
-    for (var prop in opportunities){
-        location = opportunities[prop];
-    }
-    if (Object.keys(opportunities).length) return subs.fiveOneToTwoFiveOne(buildChordArr(chordArr), location);
-    return helpers.makeChords(chordArr);
+    let location = opportunities[helpers.randomProp(opportunities)];
+    if (Object.keys(opportunities).length) return subs.fiveOne[helpers.randomProp(subs.fiveOne)](buildChordArr(chordArr), location);
+    return buildChordArr(chordArr);
 }
 
 console.log(JSON.stringify(makeSubs(fiveOne), null, 0));
-// console.log(idenfityOpps(fiveOne));
+// console.log(identifyOpps(fiveOne));
