@@ -28,13 +28,26 @@ const subs = {
             tritoneSub: function(chordArr, location){
                 let five = chordArr[location];
                 chordArr[location] = teoria.note(helpers.noteName(five.name)).interval('d5').chord('7');
-                chordArr[location].root.duration.value = five.root.duration.value;
+                return chordArr;
+            },
+            minorThirdSub: function(chordArr, location){
+                let five = chordArr[location];
+                (Math.floor(Math.random()+1)) ?
+                chordArr[location] = teoria.note(helpers.noteName(five.name)).interval('m3').chord('7') :
+                chordArr[location] = teoria.note(helpers.noteName(five.name)).interval('M6').chord('7');
                 return chordArr;
             }
             // addExtensions: function(chordArr, location){
             //     return chordArr;
             // }
             // minorThirdSub:
+        },
+        minorChord: {
+            minorToHalfDim: function(chordArr, location){
+                let minChord = chordArr[location];
+                chordArr[location] = teoria.note(helpers.noteName(minChord.name)).chord('ø');
+                return chordArr;
+            }
         }
     }
 }

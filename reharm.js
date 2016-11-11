@@ -23,7 +23,7 @@ auralize it onClick. jquery or react ?
 
 */
 
-const fiveOne = ['E7', 'G7', 'Cmaj7'];
+const fiveOne = ['Em7', 'G7', 'Cmaj7'];
 
 // builds chord array of chord objects from chord string array
 const buildChordArr = function(chordStrArr){
@@ -42,8 +42,14 @@ const identifyOpps = function(chordArr){
             (helpers.fivesOf(chordArr[i+1]).indexOf(chordArr[i]) !== -1) &&
             (!chordArr[i-1] || helpers.fivesOf(chordArr[i]).indexOf(chordArr[i-1]) === -1)
             ){
-            if (!opportunities.fiveOneToTwoFiveOne) opportunities.fiveOneToTwoFiveOne = [];
-            opportunities.fiveOneToTwoFiveOne.push(i);
+                if (!opportunities.fiveOne) opportunities.fiveOne = [];
+                opportunities.fiveOne.push(i);
+        }
+        if(
+             helpers.splitChordName(chordArr[i])[1][0] === 'm'
+        ){
+            if (!opportunities.minorChord) opportunities.minorChord = [];
+                opportunities.minorChord.push(i);
         }
     }
     console.log(opportunities);
@@ -53,10 +59,15 @@ const identifyOpps = function(chordArr){
 // make chord substitutions
 const makeSubs = function(chordArr){
     let opportunities = identifyOpps(chordArr);
-    let locations = opportunities[helpers.randomProp(opportunities)];
+    let change = helpers.randomProp(opportunities);
+    let locations = opportunities[change];
     let location = locations[Math.floor(Math.random() * locations.length)];
     if (Object.keys(opportunities).length) {
-        return subs.splitters.fiveOne[helpers.randomProp(subs.splitters.fiveOne)](buildChordArr(chordArr), location);
+        if (subs.replacers.hasOwnProperty(change.toString())){
+            return subs.replacers[change][helpers.randomProp(subs.replacers[change])](buildChordArr(chordArr), location);
+        } else {
+            return subs.splitters[change][helpers.randomProp(subs.splitters[change])](buildChordArr(chordArr), location);
+        }
     }
     return buildChordArr(chordArr);
 }
